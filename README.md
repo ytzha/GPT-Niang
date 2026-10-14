@@ -263,7 +263,21 @@ Windows 界面使用 PowerShell / WPF，Mac 界面使用 SwiftUI / AppKit，额�
 
 遇到问题可以 [提交中文问题反馈](https://github.com/T7moris/GPT-Niang/issues/new)。请说明操作系统、CPU 架构（Mac）、Codex 与挂件版本、复现步骤以及期望效果；截图请裁去对话、账号和其他私人信息。不要上传登录文件或整个状态目录。
 
-欢迎改进窗口兼容性、安装流程和可读性；改动后请运行相应平台的检查。角色为静态半身配合按压动画，不包含完整桌宠动作。
+欢迎改进窗口兼容性、安装流程和可读性；改动后请运行相应平台的检查。像素动作功能分支的当前动作与素材说明见下文。
+
+## 像素龙娘动作（功能分支）
+
+`feature/pixel-dragon-actions` 在 Windows 桌面挂件中加入清单驱动的像素动画。三种动作统一使用透明 192×192 画布和角色定位：
+
+| 动作 | 帧数与时长 | 行为 |
+| --- | --- | --- |
+| idle | 9 帧，每帧 280ms | 默认循环待机 |
+| working | 12 帧，每帧 180ms | Codex 主聊天处于工作状态时循环操作悬浮面板 |
+| drag | 12 帧，每帧 180ms | 拖动角色时循环轻微悬空姿态 |
+
+动作通过 `gpt-niang-usage/assets/pixel-dragon/animations.json` 登记，逐帧清单独立配置播放方式与时长。更换图像帧时同步更新透明命中数据。当前没有完成动作素材；完成事件继续使用既有文字气泡，按压反馈继续沿用原有压扁动画。
+
+这是 Windows WPF 功能分支，包版本标记为 1.3.5；它是本机试用构建，不代表上游正式发行版。素材使用范围见 [角色与图片素材声明](gpt-niang-usage/assets/CHARACTER-NOTICE.txt)。验证可在 Windows 上运行 `npm run test:windows`。
 
 ## 致谢与许可
 

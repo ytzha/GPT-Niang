@@ -1,14 +1,17 @@
 GPT-Niang 角色与图片素材使用声明 / GPT-Niang character and image asset notice
 
 适用范围
-本声明适用于 gpt-dragon-niang-bust.png，以及由该图制作的角色图标、
-应用图标和图片副本。该素材不适用项目代码的 MIT License。
+本声明适用于 gpt-dragon-niang-bust.png、由该图衍生的角色图标和图片副本，以及
+assets/pixel-dragon/ 下的透明像素待机、工作、拖动动画帧。图像素材不适用
+项目代码的 MIT License。
 本声明不修改代码许可，也不修改 quotes-LICENSE.txt 中的上游语录许可。
 
 素材来源与权利
 当前龙娘图片由 ImageGen 根据用户提供的角色参考生成，制作过程见
-同目录的“生成说明.md”。参考图、参考角色及可能涉及的第三方图像、
-角色设计或商标的权利仍归各自权利人；本项目不主张拥有这些第三方权利。
+同目录的“生成说明.md”。像素待机帧沿用该角色模板；工作与拖动帧根据
+维护者提供的案例形象整理为统一的 192×192 画布。参考图、参考角色及
+可能涉及的第三方图像、角色设计或商标的权利仍归各自权利人；本项目不
+主张拥有这些第三方权利。
 
 使用范围
 在维护者有权许可的范围内，允许图片随本项目及其非商业副本，作为
@@ -18,8 +21,7 @@ GPT-Niang 角色与图片素材使用声明 / GPT-Niang character and image asse
 代码的 MIT 许可不构成图片、参考角色、第三方图像或商标的商业授权；
 如需商用，应自行取得相应权利人的许可，或替换为具有适当授权的素材。
 
-Source code and documentation remain under the MIT License. The character
-image, derived icons and image copies are excluded from that license.
+Source code and documentation remain under the MIT License. The character image, derived icons, image copies, and the transparent idle, working, and drag sprites under assets/pixel-dragon/ are excluded from that license.
 To the extent the maintainers can grant permission, the image may accompany
 non-commercial copies of this project for widget and project-display purposes,
 with this notice and the source information retained. No permission is granted

@@ -38,8 +38,24 @@ function Clear-CompletionNotifications {
   [GptCompletionMonitorOutput]::Clear()
 }
 
+function Clear-CompletionNotificationQueue {
+  if($script:completionQueue){$script:completionQueue.Clear()}
+  $script:completionPendingMessage=$null
+  $script:completionActiveMessage=$null
+}
+
+function Test-CompletionMonitorNeeded {
+  if($script:completionNotificationsEnabled){return $true}
+  return ($script:characterMode-eq 'pixel' -and (Get-Command Get-WidgetCharacterActionAvailable -ErrorAction SilentlyContinue) -and ((Get-WidgetCharacterActionAvailable 'complete') -or (Get-WidgetCharacterActionAvailable 'working')))
+}
+
+function Update-CompletionMonitor {
+  if(Test-CompletionMonitorNeeded){Start-CompletionMonitor}
+  else{Stop-CompletionMonitor}
+}
+
 function Start-CompletionMonitor {
-  if(!$script:completionNotificationsEnabled){return}
+  if(!(Test-CompletionMonitorNeeded)){return}
   if($script:completionProcess){
     try{if(!$script:completionProcess.HasExited){return}}catch{}
     try{$script:completionProcess.Dispose()}catch{}
@@ -84,20 +100,20 @@ function Stop-CompletionMonitor {
     $script:completionProcess=$null
   }
   [GptCompletionMonitorOutput]::Clear()
+  if(Get-Command Set-WidgetCharacterWorking -ErrorAction SilentlyContinue){Set-WidgetCharacterWorking $false}
 }
 
 function Set-CompletionNotificationEnabled([bool]$Enabled) {
   $script:completionRetryAfter=0
   $script:completionNotificationsEnabled=$Enabled
-  if($Enabled){Start-CompletionMonitor}
-  else{
-    Stop-CompletionMonitor
-    Clear-CompletionNotifications
+  if(!$Enabled){
+    Clear-CompletionNotificationQueue
     if(!$script:collapsed -and $script:bubbleMode-eq 'completion'){
       $script:completionActiveMessage=$null
       Hide-Quota
     }
   }
+  Update-CompletionMonitor
   Save-Settings
 }
 
@@ -117,7 +133,12 @@ function Receive-CompletionMonitorLine {
   param([string]$Line,[bool]$Visible)
   try{
     $result=$Line|ConvertFrom-Json
-    if($result.message-is [string]){Queue-CompletionNotification -Message ([string]$result.message) -Visible $Visible}
+    if($result.eventType-eq 'work_state'){
+      if($result.working-is [bool] -and (Get-Command Set-WidgetCharacterWorking -ErrorAction SilentlyContinue)){Set-WidgetCharacterWorking ([bool]$result.working)}
+      return
+    }
+    if($result.success -eq $true -and (Get-Command Request-WidgetCharacterAction -ErrorAction SilentlyContinue)){Request-WidgetCharacterAction 'complete' -Success $true|Out-Null}
+    if($script:completionNotificationsEnabled -and $result.message-is [string]){Queue-CompletionNotification -Message ([string]$result.message) -Visible $Visible}
   }catch{}
 }
 
@@ -130,9 +151,9 @@ function Read-CompletionMonitorOutput([bool]$Visible) {
 }
 
 function Pump-CompletionNotifications([bool]$Visible) {
-  if(!$script:completionNotificationsEnabled){return}
+  Update-CompletionMonitor
   Read-CompletionMonitorOutput $Visible
-  Start-CompletionMonitor
+  if(!$script:completionNotificationsEnabled){return}
   if(!$Visible){
     while($script:completionQueue.Count-gt 0){$script:completionPendingMessage=$script:completionQueue.Dequeue()}
     return
