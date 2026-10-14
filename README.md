@@ -10,6 +10,8 @@
 
 <img src="gpt-niang-usage/assets/gpt-dragon-niang-bust.png" alt="无嘴巴的白发龙娘半身形象" width="240">
 
+![GPT 龙娘像素模型预览（idle 待机首帧，原始尺寸 192×192）](gpt-niang-usage/assets/pixel-dragon/idle-01.png)
+
 ## 能做什么
 
 - **点角色看额度**：按接口实际返回的窗口显示剩余百分比，例如 5 小时、每周、30 天；单个窗口在原气泡内居中，横条越满，剩余额度越多。成功查询时折叠未返回的整条窗口；查询失败会显示异常，重置时间为空时仍保留百分比。
